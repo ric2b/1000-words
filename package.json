@@ -6,7 +6,16 @@
     "build": "svelte-kit build",
     "preview": "svelte-kit preview",
     "lint": "prettier --check . && eslint --ignore-path .gitignore .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "prepare": "npm run vite-workaround",
+    "vite-workaround": "find node_modules/@material/ -name \"*.js.map\" -type f -delete",
+    "smui-theme-light": "smui-theme compile static/smui.css -i src/theme"
+  },
+  "dependencies": {
+    "@smui/button": "^4.1.0",
+    "@smui/card": "^4.1.0",
+    "@smui/icon-button": "^4.1.0",
+    "svelte-material-ui": "^4.1.0"
   },
   "devDependencies": {
     "@sveltejs/adapter-static": "next",
@@ -16,8 +25,9 @@
     "eslint-plugin-svelte3": "^3.2.0",
     "prettier": "~2.2.1",
     "prettier-plugin-svelte": "^2.2.0",
+    "smui-theme": "^4.1.0",
     "svelte": "^3.34.0",
-    "vite": "^2.2.3"
+    "vite": "^2.2.4"
   },
   "type": "module"
 }

@@ -12,6 +12,12 @@
 </script>
 
 <script>
+  import Card, { Content, PrimaryAction, Actions, ActionButtons, ActionIcons, } from '@smui/card';
+  import Button, { Label } from '@smui/button';
+  import IconButton, { Icon } from '@smui/icon-button';
+
+  let clicked = 0;
+
   export let phrases;
 
   let language = 'Deutsch';
@@ -62,3 +68,78 @@
 {/if}
 
 <button on:click={shuffle}>Shuffle</button>
+
+<Card>
+      <Content>A card with Both.</Content>
+      <Actions>
+        <ActionButtons>
+          <Button on:click={() => clicked++}>
+            <Label>Action</Label>
+          </Button>
+          <Button on:click={() => clicked++}>
+            <Label>Another</Label>
+          </Button>
+        </ActionButtons>
+        <ActionIcons>
+          <IconButton
+            on:click={() => clicked++}
+            toggle
+            aria-label="Add to favorites"
+            title="Add to favorites"
+          >
+            <Icon class="material-icons" on>favorite</Icon>
+            <Icon class="material-icons">favorite_border</Icon>
+          </IconButton>
+          <IconButton
+            class="material-icons"
+            on:click={() => clicked++}
+            title="Share">share</IconButton
+          >
+          <IconButton
+            class="material-icons"
+            on:click={() => clicked++}
+            title="More options">more_vert</IconButton
+          >
+        </ActionIcons>
+      </Actions>
+    </Card>
+
+<div>
+  <Button on:click={() => clicked++} variant="raised">
+    <Label>Default</Label>
+  </Button>
+</div>
+
+<link rel="stylesheet" href="node_modules/svelte-material-ui/bare.css" />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/icon?family=Material+Icons"
+/>
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,600,700"
+/>
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Roboto+Mono"
+/>
+<!-- 
+<style>
+  /*:global(body) {*/
+    /*background: #f97316;*/
+    /*background: #f97316;*/
+    /*background: linear-gradient(90deg, #fcd34d 0%, #f97316 100%);  */
+
+    /*https://cssgradient.io/*/
+    /*https://headlessui.dev/vue/switch*/
+    /*purple: #a855f7; to #6366f1*/
+    /*orange: fcd34d to f97316 */
+    /*green: #4ade80 to #06b6d4*/
+    /*violet: #d946ef to #9333ea */
+    /*blue: #38bdf8 to #6366f1*/
+    /*magenta: #fb923c to #db2777*/
+    /*cyan: #22d3ee to #0ea5e9*/
+    /*magenta2: #ec4899 to #f43f5e*/
+  /*}*/
+  
+</style> -->
