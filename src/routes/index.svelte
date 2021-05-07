@@ -120,6 +120,7 @@
 
 <link rel="stylesheet" href="bare.css" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+<!-- <link rel="stylesheet" href="$node_modules/material-icons/iconfont/material-icons.css" /> -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,600,700" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono" />
 
@@ -141,11 +142,11 @@
   } 
 
   #translation {
-    opacity: 0.0
+    filter: blur(4px);
   }
 
   #translation.translationRevealed {
-    opacity: 1.0
+    filter: none;
   }
 
   :global(body) {
