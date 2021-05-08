@@ -17,6 +17,9 @@
   import IconButton, { Icon } from '@smui/icon-button';
   import Slider from '@smui/slider';
   import FormField from '@smui/form-field';
+
+  import "@fontsource/roboto"
+  import "@fontsource/roboto-mono"
   import 'material-icons/iconfont/material-icons.css';
 
   let clicked = 0;
@@ -111,17 +114,17 @@
       <IconButton class="material-icons" ripple={false} disabled={translationRevealed} on:click={() => translationRevealed = true} title="Reveal">visibility</IconButton>
     </ActionButtons>
 
-    <ActionIcons>
+    <!-- <ActionIcons>
       <IconButton class="material-icons" on:click={shuffle} title="Shuffle words">
         {#if !phrases_shuffled} shuffle {:else} shuffle_on {/if}
       </IconButton>
-    </ActionIcons>
+    </ActionIcons> -->
   </Actions>
 </Card>
 
 <link rel="stylesheet" href="bare.css" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,600,700" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono" />
+<!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,600,700" /> -->
+<!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono" /> -->
 
 <style>
   h1 {

@@ -12,6 +12,8 @@
     "smui-theme-light": "smui-theme compile static/smui.css -i src/theme"
   },
   "dependencies": {
+    "@fontsource/roboto": "^4.3.0",
+    "@fontsource/roboto-mono": "^4.3.0",
     "@material/typography": "^11.0.0",
     "@smui/button": "^4.1.0",
     "@smui/card": "^4.1.0",
