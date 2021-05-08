@@ -18,7 +18,8 @@
   import Slider from '@smui/slider';
   import FormField from '@smui/form-field';
 
-  import "@fontsource/roboto"
+  import "@fontsource/roboto/400.css"
+  import "@fontsource/roboto/700.css"
   import "@fontsource/roboto-mono"
   import 'material-icons/iconfont/material-icons.css';
 
@@ -123,8 +124,6 @@
 </Card>
 
 <link rel="stylesheet" href="bare.css" />
-<!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,600,700" /> -->
-<!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono" /> -->
 
 <style>
   h1 {
