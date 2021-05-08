@@ -12,6 +12,8 @@
 </script>
 
 <script>
+  import { browser } from '$app/env';
+
   import Card, { Content, PrimaryAction, Actions, ActionButtons, ActionIcons, } from '@smui/card';
   import Button, { Label } from '@smui/button';
   import IconButton, { Icon } from '@smui/icon-button';
@@ -25,55 +27,24 @@
   import 'material-icons/iconfont/material-icons.css';
 
   let clicked = 0;
-  let currentWordIndex = 0;
+  let currentWordIndex = browser ? Number(localStorage.getItem("list_de-en_currentWordIndex") || '0') : 0;
   let phrases_shuffled = false;
 
   export let phrases;
 
   let language = 'Deutsch';
 
-  // let phraseIterator = phrases[Symbol.iterator]();
   let next, translationRevealed;
 
-  // $: current = phraseIterator.next();
   $: [currentPhrase, currentTranslation] = phrases[currentWordIndex];
-  // $: nextPhrase = phrases[currentWordIndex + 1];
-
-  // $: console.log(currentWordIndex)
-  // $: console.log(phrases.length)
-  // $: {
-  //   phraseIterator;
-  //   current = phraseIterator.next();
-  //   currentWordIndex = 0;
-  // }
-
-  // $: {
-  //   current; // block is triggered when current is updated
-  //   translationRevealed = false;
-  //   // next = phraseIterator.next();
-  //   // next = phrases[currentWordIndex];
-  //   currentWordIndex += 1;
-  // }
-
-  // $: currentWordIndex = phrases ? 0 : 0;
 
   $: {
-    currentWordIndex; // block is triggered when current is updated
+    currentWordIndex; // block is triggered when current index changes
     translationRevealed = false;
-    // next = phraseIterator.next();
-    // next = phrases[currentWordIndex];
-    // currentWordIndex += 1;
+    if (browser) { localStorage.setItem("list_de-en_currentWordIndex", currentWordIndex) }
   }
 
-  // $: [currentPhrase, currentTranslation] = current.value;
-  // $: finished = next.done;
   $: finished = currentWordIndex + 1 >= phrases.length;
-
-  // const revealTranslation = () => translationRevealed = true;
-  // const getNextPhrase = () => (current = next);
-  // const getNextPhrase = () => { currentWordIndex < phrases.length - 1 ? currentWordIndex += 1 : currentWordIndex = 0 };
-  // const resetIterator = () => (phraseIterator = Object.entries(phrases)[Symbol.iterator]());
-  // const resetIterator = () => currentWordIndex = 0;
 
   function shuffle() {
     const shuffled = phrases
@@ -91,12 +62,8 @@
 </script>
 
 <title>1000 words</title>
-<!-- <div class="mdc-typography--headline1">{language} 1000 most common words</div> -->
-<!-- <h1>{language} 1000 most common words</h1> -->
-<!-- <h1>Die 1000 häufigsten deutschen Wörter</h1> -->
 
 <h1 on:mouseenter={() => header = 'The 1000 most common german words'} on:mouseleave={() => header = 'Die 1000 häufigsten deutschen Wörter'}>{header}</h1>
-<!-- 1000 häufigste Wörter -->
 
 <Card>
   <Wrapper>
@@ -124,12 +91,6 @@
         <Tooltip yPos="above">Reveal</Tooltip>
       </Wrapper>
     </ActionButtons>
-
-    <!-- <ActionIcons>
-      <IconButton class="material-icons" on:click={shuffle} title="Shuffle words">
-        {#if !phrases_shuffled} shuffle {:else} shuffle_on {/if}
-      </IconButton>
-    </ActionIcons> -->
   </Actions>
 </Card>
 
