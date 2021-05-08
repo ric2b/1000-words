@@ -17,6 +17,7 @@
   import IconButton, { Icon } from '@smui/icon-button';
   import Slider from '@smui/slider';
   import FormField from '@smui/form-field';
+  import Tooltip, { Wrapper } from '@smui/tooltip';
 
   import "@fontsource/roboto/400.css"
   import "@fontsource/roboto/700.css"
@@ -98,21 +99,30 @@
 <!-- 1000 häufigste Wörter -->
 
 <Card>
-  <Slider style="flex-grow: 1;" bind:value={currentWordIndex} max={phrases.length-1} />
+  <Wrapper>
+    <Slider style="flex-grow: 1;" bind:value={currentWordIndex} max={phrases.length-1} />
+    <Tooltip xPos="start" yPos="below">Move to the desired list position</Tooltip>
+  </Wrapper>
   <Content>
     <h2>{currentPhrase}</h2>
     <p id="translation" class:translationRevealed>{currentTranslation}</p>
   </Content>
   <Actions>
     <ActionButtons>
-      {#if currentWordIndex < phrases.length - 1}
-        <IconButton class="material-icons" on:click={() => currentWordIndex += 1} title="Get next word">arrow_forward</IconButton>
-      {:else}
-        <IconButton class="material-icons" on:click={() => currentWordIndex = 0} title="Restart">replay</IconButton>
-      {/if}
-
+      <Wrapper>
+        {#if currentWordIndex < phrases.length - 1}
+          <IconButton class="material-icons" on:click={() => currentWordIndex += 1}>arrow_forward</IconButton>
+          <Tooltip yPos="above">Get next word</Tooltip>
+        {:else}
+          <IconButton class="material-icons" on:click={() => currentWordIndex = 0}>replay</IconButton>
+          <Tooltip yPos="above">Restart</Tooltip>
+        {/if}
+      </Wrapper>
       <!-- https://github.com/hperrin/svelte-material-ui/issues/108#issuecomment-782583530 -->
-      <IconButton class="material-icons" ripple={false} disabled={translationRevealed} on:click={() => translationRevealed = true} title="Reveal">visibility</IconButton>
+      <Wrapper>
+        <IconButton class="material-icons" ripple={false} disabled={translationRevealed} on:click={() => translationRevealed = true}>visibility</IconButton>
+        <Tooltip yPos="above">Reveal</Tooltip>
+      </Wrapper>
     </ActionButtons>
 
     <!-- <ActionIcons>
