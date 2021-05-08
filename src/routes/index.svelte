@@ -17,6 +17,7 @@
   import IconButton, { Icon } from '@smui/icon-button';
   import Slider from '@smui/slider';
   import FormField from '@smui/form-field';
+  import 'material-icons/iconfont/material-icons.css';
 
   let clicked = 0;
   let currentWordIndex = 0;
@@ -119,8 +120,6 @@
 </Card>
 
 <link rel="stylesheet" href="bare.css" />
-<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
-<!-- <link rel="stylesheet" href="$node_modules/material-icons/iconfont/material-icons.css" /> -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,600,700" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono" />
 
