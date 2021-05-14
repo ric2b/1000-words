@@ -13,7 +13,7 @@ module.exports = {
         include: ['@material/ripple', '@material/dom', '@material/icon-button']
       },*/
       ssr: {
-        noExternal: ['@smui/card', '@smui/button', '@smui/icon-button', '@smui/slider', '@smui/form-field', '@material/typography']
+        noExternal: ['@smui/card', '@smui/button', '@smui/icon-button', '@smui/slider', '@smui/form-field', '@smui/select', '@material/typography']
       }
     }
   },

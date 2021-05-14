@@ -19,6 +19,7 @@
     "@smui/card": "^4.1.0",
     "@smui/form-field": "^4.1.0",
     "@smui/icon-button": "^4.1.0",
+    "@smui/select": "^4.1.0",
     "@smui/slider": "^4.1.0",
     "@smui/tooltip": "^4.1.0",
     "material-icons": "^0.6.2",
