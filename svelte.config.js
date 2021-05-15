@@ -1,7 +1,7 @@
-const adapter_static = require('@sveltejs/adapter-static');
+import adapter_static from '@sveltejs/adapter-static';
 
 /** @type {import('@sveltejs/kit').Config} */
-module.exports = {
+export default {
   kit: {
     adapter: adapter_static(),
 
@@ -13,7 +13,7 @@ module.exports = {
         include: ['@material/ripple', '@material/dom', '@material/icon-button']
       },*/
       ssr: {
-        noExternal: ['@smui/card', '@smui/button', '@smui/icon-button', '@smui/slider', '@smui/form-field', '@smui/list', '@smui/menu', '@material/typography']
+        noExternal: ['@smui/card', '@smui/button', '@smui/icon-button', '@smui/slider', '@smui/form-field', '@material/typography']
       }
     }
   },
