@@ -19,6 +19,8 @@
     "@smui/card": "^4.1.0",
     "@smui/form-field": "^4.1.0",
     "@smui/icon-button": "^4.1.0",
+    "@smui/list": "^4.1.0",
+    "@smui/menu": "^4.1.0",
     "@smui/select": "^4.1.0",
     "@smui/slider": "^4.1.0",
     "@smui/tooltip": "^4.1.0",
@@ -33,8 +35,8 @@
     "eslint-plugin-svelte3": "^3.2.0",
     "prettier": "~2.2.1",
     "prettier-plugin-svelte": "^2.2.0",
-    "smui-theme": "^4.1.0",
-    "svelte": "^3.34.0",
+    "smui-theme": "^4.2.0",
+    "svelte": "^3.38.1",
     "vite": "^2.2.4"
   },
   "type": "module"

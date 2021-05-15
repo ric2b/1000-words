@@ -19,6 +19,7 @@
 
 <script>
   import { base, assets } from '$app/paths';
+  import { goto } from '$app/navigation';
   import { browser } from '$app/env';
 
   import Card, { Content, PrimaryAction, Actions, ActionButtons, ActionIcons, } from '@smui/card';
@@ -27,7 +28,8 @@
   import Slider from '@smui/slider';
   import FormField from '@smui/form-field';
   import Tooltip, { Wrapper } from '@smui/tooltip';
-  import Select, { Option } from '@smui/select';
+  import Menu from '@smui/menu';
+  import List, { Item, Separator, Text } from '@smui/list';
 
   import "@fontsource/roboto/400.css"
   import "@fontsource/roboto/700.css"
@@ -37,11 +39,8 @@
   export let selectedList;
   export let phrases;
 
-  let clicked = 0;
+  let listMenu;
   let currentWordIndex = browser ? Number(localStorage.getItem(`list_${selectedList}_currentWordIndex`) || '0') : 0;
-  let phrases_shuffled = false;
-
-  let language = 'Deutsch';
 
   let next, translationRevealed;
 
@@ -56,6 +55,7 @@
   $: finished = currentWordIndex + 1 >= phrases.length;
 
   let header = 'Die 1000 häufigsten deutschen Wörter';
+  let menuAnchor;
 </script>
 
 <link rel="stylesheet" href={`${assets}/css/bare.css`} />
@@ -64,19 +64,38 @@
 
 <h1 on:mouseenter={() => header = 'The 1000 most common german words'} on:mouseleave={() => header = 'Die 1000 häufigsten deutschen Wörter'}>{header}</h1>
 
-<!-- <body> -->
 <Card>
   <Wrapper>
+    <!-- TODO: fix max not updating when changing list -->
     <Slider style="flex-grow: 1;" bind:value={currentWordIndex} max={phrases.length-1} />
     <Tooltip xPos="start" yPos="below">Move to the desired list position</Tooltip>
   </Wrapper>
+
   <Content>
     <h2>{currentPhrase}</h2>
     <p id="translation" class:translationRevealed>{currentTranslation}</p>
   </Content>
+  
   <Actions>
     <ActionButtons>
-      <!-- TODO: Fix buttons switching places when reaching the end -->
+      <div hidden bind:this={menuAnchor}>
+        <Button on:click={() => listMenu.setOpen(true)}>Change list</Button>
+        <Menu bind:this={listMenu} bind:anchorElement={menuAnchor} anchorCorner="BOTTOM_LEFT">
+          <List>
+            <Item on:SMUI:action={() => goto('/list/de-pt')}><Text>Deutsch - Português</Text></Item>
+            <Item on:SMUI:action={() => goto('/list/de-en')}><Text>Deutsch - English</Text></Item>
+          </List>
+        </Menu>
+      </div>
+    </ActionButtons>
+
+    <ActionIcons>
+      <!-- https://github.com/hperrin/svelte-material-ui/issues/108#issuecomment-782583530 -->
+      <Wrapper>
+        <IconButton class="material-icons" ripple={false} disabled={translationRevealed} on:click={() => translationRevealed = true}>visibility</IconButton>
+        <Tooltip yPos="above">Reveal</Tooltip>
+      </Wrapper>
+
       {#if currentWordIndex < phrases.length - 1}
         <Wrapper>  
           <IconButton class="material-icons" on:click={() => currentWordIndex += 1}>arrow_forward</IconButton>
@@ -88,35 +107,9 @@
           <Tooltip yPos="above">Restart</Tooltip>
         </Wrapper>
       {/if}
-      <!-- https://github.com/hperrin/svelte-material-ui/issues/108#issuecomment-782583530 -->
-      <Wrapper>
-        <IconButton class="material-icons" ripple={false} disabled={translationRevealed} on:click={() => translationRevealed = true}>visibility</IconButton>
-        <Tooltip yPos="above">Reveal</Tooltip>
-      </Wrapper>
-    </ActionButtons>
-
-    <!-- <ActionIcons>
-      <Select bind:value={selectedList} label="Word list">
-        <Option value="de-en">Deutsch - English</Option>
-        <Option value="de-pt">Deuthsch - Português</Option>
-      </Select>
-    </ActionIcons> -->
+    </ActionIcons>
   </Actions>
 </Card>
-<!-- </body> -->
-
-<!-- <footer>
-  <Select align="bottom" variant="filled" bind:value={selectedList} label="Word list">
-    <Option value="de-en">Deutsch - English</Option>
-    <Option value="de-pt">Deuthsch - Português</Option>
-  </Select>
-</footer> -->
-<!-- <Select variant="outlined" bind:selectedList label="Fruit"> -->
-  <!-- <Option value="" />  -->
-  <!-- {#each fruits as fruit}
-    <Option value={fruit}>{fruit}</Option>
-  {/each} -->
-<!-- </Select> -->
 
 <style>
   h1 {
