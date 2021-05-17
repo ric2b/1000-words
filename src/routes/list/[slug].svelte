@@ -1,4 +1,6 @@
 <script context="module">
+  import { base, assets } from '$app/paths';
+
   export async function load({ page, fetch, session, context }) {
     // https://1000mostcommonwords.com/1000-most-common-german-words/ + https://www.convertjson.com/html-table-to-json.htm
     const selectedList = page.params.slug || 'de-en';
@@ -18,7 +20,6 @@
 </script>
 
 <script>
-  import { base, assets } from '$app/paths';
   import { goto } from '$app/navigation';
   import { browser } from '$app/env';
 
@@ -83,7 +84,9 @@
         <Menu bind:this={listMenu} bind:anchorElement={menuAnchor} anchorCorner="BOTTOM_LEFT">
           <List>
             <Item on:SMUI:action={() => goto('/list/de-pt')}><Text>Deutsch - Português</Text></Item>
+            <!-- <Item><a href="/list/de-pt"><Text>Deutsch - Português</Text></Item> -->
             <Item on:SMUI:action={() => goto('/list/de-en')}><Text>Deutsch - English</Text></Item>
+            <!-- <Item><a href="/list/de-en"><Text>Deutsch - English</Text></Item> -->
           </List>
         </Menu>
       </div>
