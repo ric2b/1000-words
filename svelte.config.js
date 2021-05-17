@@ -16,9 +16,9 @@ export default {
       /*optimizeDeps: {
         include: ['@material/ripple', '@material/dom', '@material/icon-button']
       },*/
-      ssr: {
-        noExternal: ['@smui/card', '@smui/button', '@smui/icon-button', '@smui/slider', '@smui/form-field', '@material/typography']
-      }
+      /*ssr: {
+        noExternal: ['@smui/card', '@smui/button', '@smui/icon-button', '@smui/slider', '@smui/form-field', '@smui/menu', '@smui/select', '@smui/list', '@material/typography']
+      }*/
     }
   },
 };
