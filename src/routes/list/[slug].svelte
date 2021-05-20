@@ -96,18 +96,14 @@
         <IconButton class="material-icons" ripple={false} disabled={translationRevealed} on:click={() => translationRevealed = true}>visibility</IconButton>
         <Tooltip yPos="above">Reveal</Tooltip>
       </Wrapper>
-
-      {#if currentWordIndex < phrases.length - 1}
-        <Wrapper>  
-          <IconButton class="material-icons" on:click={() => currentWordIndex += 1}>arrow_forward</IconButton>
-          <Tooltip yPos="above">Get next word</Tooltip>
-        </Wrapper>
-      {:else}
-        <Wrapper>
-          <IconButton class="material-icons" on:click={() => currentWordIndex = 0}>replay</IconButton>
-          <Tooltip yPos="above">Restart</Tooltip>
-        </Wrapper>
-      {/if}
+      
+      <Wrapper>
+        <IconButton on:click={() => finished ? currentWordIndex = 0 : currentWordIndex += 1} bind:pressed={finished}>
+          <Icon class="material-icons">arrow_forward</Icon>
+          <Icon class="material-icons" on>replay</Icon>
+        </IconButton>
+        <Tooltip yPos="above">Get next word</Tooltip>
+      </Wrapper>
     </ActionIcons>
   </Actions>
 </Card>
