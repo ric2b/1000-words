@@ -40,11 +40,9 @@
   export let selectedList;
   export let phrases;
 
-  let listMenu;
-  let currentWordIndex = browser ? Number(localStorage.getItem(`list_${selectedList}_currentWordIndex`) || '0') : 0;
+  let listMenu, translationRevealed;
 
-  let next, translationRevealed;
-
+  $: currentWordIndex = browser ? Number(localStorage.getItem(`list_${selectedList}_currentWordIndex`) || '0') : 0;
   $: [currentPhrase, currentTranslation] = phrases[currentWordIndex];
 
   $: {
