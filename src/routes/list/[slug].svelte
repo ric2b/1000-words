@@ -57,9 +57,11 @@
   let menuAnchor;
 </script>
 
-<link rel="stylesheet" href={`${assets}/css/bare.css`} />
+<svelte:head>
+  <link rel="stylesheet" href={`${assets}/css/bare.css`} />
 
-<title>1000 words</title>
+  <title>1000 words</title>
+</svelte:head>
 
 <h1 on:mouseenter={() => header = 'The 1000 most common german words'} on:mouseleave={() => header = 'Die 1000 häufigsten deutschen Wörter'}>{header}</h1>
 
