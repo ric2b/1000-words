@@ -66,11 +66,13 @@
 <h1 on:mouseenter={() => header = 'The 1000 most common german words'} on:mouseleave={() => header = 'Die 1000 häufigsten deutschen Wörter'}>{header}</h1>
 
 <Card>
-  <Wrapper>
+  <!-- <input type=range min=0 max={phrases.length-1} bind:value={currentWordIndex}> -->
+  <Slider  discrete tickMarks bind:value={currentWordIndex} min=0 max={phrases.length-1} />
+  <!-- <Wrapper> -->
     <!-- TODO: fix max not updating when changing list -->
-    <Slider style="flex-grow: 1;" bind:value={currentWordIndex} max={phrases.length-1} />
-    <Tooltip xPos="start" yPos="below">Move to the desired list position</Tooltip>
-  </Wrapper>
+    <!-- <Slider  discrete tickMarks bind:value={currentWordIndex} `max={phrases.length-1}` /> -->
+    <!-- <Tooltip xPos="start" yPos="below">Move to the desired list position</Tooltip> -->
+  <!-- </Wrapper> -->
 
   <Content>
     <h2>{currentPhrase}</h2>
