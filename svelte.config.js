@@ -9,7 +9,7 @@ export default {
     target: '#svelte',
 
     prerender: {
-      pages: ['*', '/list/de-en', '/list/de-pt'],
+      pages: ['*', '/list/de-en', '/list/verben-mit-praepositionen'],
     },
     
     vite: { 
