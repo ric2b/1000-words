@@ -70,8 +70,8 @@
 
 <h1 on:mouseenter={() => header = 'The 1000 most common german words'} on:mouseleave={() => header = 'Die 1000 häufigsten deutschen Wörter'}>{header}</h1>
 
-<a href="/list/de-en">1</a>
-<a href="/list/verben-mit-praepositionen">2</a>
+<a hidden href="/list/de-en">1</a>
+<a hidden href="/list/verben-mit-praepositionen">2</a>
 
 <Card>
   {#key phrases.length} <!-- Workaround for https://github.com/hperrin/svelte-material-ui/issues/247 -->
