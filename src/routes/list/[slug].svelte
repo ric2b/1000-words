@@ -66,13 +66,9 @@
 <h1 on:mouseenter={() => header = 'The 1000 most common german words'} on:mouseleave={() => header = 'Die 1000 häufigsten deutschen Wörter'}>{header}</h1>
 
 <Card>
-  <!-- <input type=range min=0 max={phrases.length-1} bind:value={currentWordIndex}> -->
-  <Slider  discrete tickMarks bind:value={currentWordIndex} min=0 max={phrases.length-1} />
-  <!-- <Wrapper> -->
-    <!-- TODO: fix max not updating when changing list -->
-    <!-- <Slider  discrete tickMarks bind:value={currentWordIndex} `max={phrases.length-1}` /> -->
-    <!-- <Tooltip xPos="start" yPos="below">Move to the desired list position</Tooltip> -->
-  <!-- </Wrapper> -->
+  {#key phrases.length} <!-- Workaround for https://github.com/hperrin/svelte-material-ui/issues/247 -->
+    <Slider discrete tickMarks bind:value={currentWordIndex} max={phrases.length-1} />
+  {/key}
 
   <Content>
     <h2>{currentPhrase}</h2>
