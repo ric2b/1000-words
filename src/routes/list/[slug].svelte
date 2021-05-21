@@ -111,6 +111,9 @@
   </Actions>
 </Card>
 
+<a hidden href="/list/de-en"/>
+<a hidden href="/list/verben-mit-praepositionen"/>
+
 <style>
   h1 {
     /*font-family: "Roboto", sans-serif;*/
