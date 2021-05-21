@@ -15,14 +15,17 @@
     "@fontsource/roboto": "^4.3.0",
     "@fontsource/roboto-mono": "^4.3.0",
     "@material/typography": "^11.0.0",
-    "@smui/button": "^4.1.0",
-    "@smui/card": "^4.1.0",
-    "@smui/form-field": "^4.1.0",
-    "@smui/icon-button": "^4.1.0",
-    "@smui/slider": "^4.1.0",
-    "@smui/tooltip": "^4.1.0",
+    "@smui/button": "^4.2.0",
+    "@smui/card": "^4.2.0",
+    "@smui/form-field": "^4.2.0",
+    "@smui/icon-button": "^4.2.0",
+    "@smui/list": "^4.2.0",
+    "@smui/menu": "^4.2.0",
+    "@smui/select": "^4.2.0",
+    "@smui/slider": "^4.2.0",
+    "@smui/tooltip": "^4.2.0",
     "material-icons": "^0.6.2",
-    "svelte-material-ui": "^4.1.0"
+    "svelte-material-ui": "^4.2.0"
   },
   "devDependencies": {
     "@sveltejs/adapter-static": "next",
@@ -32,9 +35,9 @@
     "eslint-plugin-svelte3": "^3.2.0",
     "prettier": "~2.2.1",
     "prettier-plugin-svelte": "^2.2.0",
-    "smui-theme": "^4.1.0",
-    "svelte": "^3.34.0",
-    "vite": "^2.2.4"
+    "smui-theme": "^4.2.0",
+    "svelte": "^3.38.2",
+    "vite": "^2.3.2"
   },
   "type": "module"
 }
