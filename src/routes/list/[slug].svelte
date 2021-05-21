@@ -88,6 +88,8 @@
           <List>
             <Item on:SMUI:action={() => goto('/list/de-en')}><Text>Deutsch - English</Text></Item>
             <Item on:SMUI:action={() => goto('/list/verben-mit-praepositionen')}><Text>Verben mit Präpositionen</Text></Item>
+            <a hidden href="/list/de-en"/>
+            <a hidden href="/list/verben-mit-praepositionen"/>
           </List>
         </Menu>
       </div>
