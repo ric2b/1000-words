@@ -5,5 +5,5 @@
   }
 </script>
 
-<a hidden href="/list/de-en"/>
-<a hidden href="/list/verben-mit-praepositionen"/>
+<a href="/list/de-en">1</a>
+<a href="/list/verben-mit-praepositionen">2</a>
