@@ -20,7 +20,7 @@
 </script>
 
 <script>
-  import { goto } from '$app/navigation';
+  import { goto, prefetch } from '$app/navigation';
   import { browser } from '$app/env';
 
   import Card, { Content, PrimaryAction, Actions, ActionButtons, ActionIcons, } from '@smui/card';
@@ -40,7 +40,7 @@
   export let selectedList;
   export let phrases;
 
-  let listMenu, translationRevealed;
+  let translationRevealed, listMenu, menuAnchor;
 
   $: currentWordIndex = browser ? Number(localStorage.getItem(`list_${selectedList}_currentWordIndex`) || '0') : 0;
   $: [currentPhrase, currentTranslation] = phrases[currentWordIndex];
@@ -54,7 +54,12 @@
   $: finished = currentWordIndex + 1 >= phrases.length;
 
   let header = 'Die 1000 häufigsten deutschen Wörter';
-  let menuAnchor;
+
+  function open_list_menu() {
+    listMenu.setOpen(true);
+    prefetch('/list/de-en');
+    prefetch('/list/verben-mit-praepositionen');
+  }
 </script>
 
 <svelte:head>
@@ -78,7 +83,7 @@
   <Actions>
     <ActionButtons>
       <div bind:this={menuAnchor}>
-        <Button on:click={() => listMenu.setOpen(true)}>Änderungsliste</Button>
+        <Button on:click={open_list_menu}>Änderungsliste</Button>
         <Menu bind:this={listMenu} bind:anchorElement={menuAnchor} anchorCorner="BOTTOM_LEFT">
           <List>
             <Item on:SMUI:action={() => goto('/list/de-en')}><Text>Deutsch - English</Text></Item>
