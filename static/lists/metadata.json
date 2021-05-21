@@ -1,0 +1,15 @@
+{
+    "defaultList": "de-en",
+    "lists": {
+        "de-en": {
+            "name": "Deutsch - English", 
+            "header": "Die 1000 häufigsten deutschen Wörter", 
+            "hoverHeader": "The 1000 most common german words"
+        },
+        "verben-mit-praepositionen": {
+            "name": "Verben mit Präpositionen",
+            "header": "Verben mit Präpositionen", 
+            "hoverHeader": "Verbs with prepositions"
+        }
+    }
+}
