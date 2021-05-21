@@ -9,7 +9,7 @@ export default {
     target: '#svelte',
 
     prerender: {
-      pages: ['*', '/list/de-en', '/list/verben-mit-praepositionen'],
+      pages: ['*', '/list/de-en'],  // need to add one of the dynamic pages, svelte kit will then find the other lists based on prefetch calls
     },
     
     vite: { 

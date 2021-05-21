@@ -5,7 +5,6 @@
     // https://1000mostcommonwords.com/1000-most-common-german-words/ + https://www.convertjson.com/html-table-to-json.htm
     const selectedList = page.params.slug || 'de-en';
     const url = `${assets}/lists/${selectedList}.csv`;
-    // const url = `${page.params.slug || defaultList}.csv`;
     const response = await fetch(url);
 
     if (response.ok) {
