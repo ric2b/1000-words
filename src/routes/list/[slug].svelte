@@ -3,14 +3,14 @@
 
   export async function load({ page, fetch, session, context }) {
     // https://1000mostcommonwords.com/1000-most-common-german-words/ + https://www.convertjson.com/html-table-to-json.htm
-    const selectedList = page.params.slug || 'de-en';
+    const selectedList = page.params.slug;
     const url = `${assets}/lists/${selectedList}.csv`;
-    // const url = `${page.params.slug || defaultList}.csv`;
     const response = await fetch(url);
 
     if (response.ok) {
       return { props: { 
-        selectedList: selectedList, 
+        listMetadata: await (await fetch(`${assets}/lists/metadata.json`)).json(),
+        selectedList: selectedList,
         phrases: await response.text().then(text => text.split('\n').map(x => x.split(','))) 
       } };
     }
@@ -37,10 +37,14 @@
   import "@fontsource/roboto-mono"
   import 'material-icons/iconfont/material-icons.css';
 
+  export let listMetadata;
   export let selectedList;
   export let phrases;
 
   let translationRevealed, listMenu, menuAnchor;
+
+  $: currentListMeta = listMetadata.lists[selectedList];
+  $: header = currentListMeta.header;
 
   $: currentWordIndex = browser ? Number(localStorage.getItem(`list_${selectedList}_currentWordIndex`) || '0') : 0;
   $: [currentPhrase, currentTranslation] = phrases[currentWordIndex];
@@ -53,22 +57,22 @@
 
   $: finished = currentWordIndex + 1 >= phrases.length;
 
-  let header = 'Die 1000 häufigsten deutschen Wörter';
-
   function open_list_menu() {
     listMenu.setOpen(true);
-    prefetch('/list/de-en');
-    prefetch('/list/verben-mit-praepositionen');
+    for (const listId in listMetadata.lists) {
+      prefetch(`${assets}/list/${listId}`);  
+    }
   }
 </script>
 
 <svelte:head>
   <link rel="stylesheet" href={`${assets}/css/bare.css`} />
-
   <title>1000 words</title>
 </svelte:head>
 
-<h1 on:mouseenter={() => header = 'The 1000 most common german words'} on:mouseleave={() => header = 'Die 1000 häufigsten deutschen Wörter'}>{header}</h1>
+<h1 on:mouseenter={() => header = currentListMeta.hoverHeader} on:mouseleave={() => header = currentListMeta.header}>
+  {header}
+</h1>
 
 <Card>
   {#key phrases.length} <!-- Workaround for https://github.com/hperrin/svelte-material-ui/issues/247 -->
@@ -86,8 +90,9 @@
         <Button on:click={open_list_menu}>Änderungsliste</Button>
         <Menu bind:this={listMenu} bind:anchorElement={menuAnchor} anchorCorner="BOTTOM_LEFT">
           <List>
-            <Item on:SMUI:action={() => goto('/list/de-en')}><Text>Deutsch - English</Text></Item>
-            <Item on:SMUI:action={() => goto('/list/verben-mit-praepositionen')}><Text>Verben mit Präpositionen</Text></Item>
+            {#each Object.entries(listMetadata.lists) as [listId, listMeta], i (listId)}
+              <Item on:SMUI:action={() => goto(`${base}/list/${listId}`)}><Text>{listMeta.name}</Text></Item>
+            {/each}
           </List>
         </Menu>
       </div>
