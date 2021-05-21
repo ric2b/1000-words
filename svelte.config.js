@@ -9,7 +9,7 @@ export default {
     target: '#svelte',
 
     prerender: {
-      pages: ['*', '/list/de-en'],
+      pages: ['*', '/list/de-en'],  // need to add /list/de-en, svelte kit will then find the other lists based on the hidden a tags
     },
     
     vite: { 
