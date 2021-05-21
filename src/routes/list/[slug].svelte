@@ -85,10 +85,10 @@
         <Button on:click={() => listMenu.setOpen(true)}>Change list</Button>
         <Menu bind:this={listMenu} bind:anchorElement={menuAnchor} anchorCorner="BOTTOM_LEFT">
           <List>
-            <!-- <Item on:SMUI:action={() => goto('/list/de-pt')}><Text>Deutsch - Português</Text></Item> -->
-            <Item><a sveltekit:prefetch href="/list/de-pt"><Text>Deutsch - Português</Text></Item>
-            <!-- <Item on:SMUI:action={() => goto('/list/de-en')}><Text>Deutsch - English</Text></Item> -->
-            <Item><a sveltekit:prefetch href="/list/de-en"><Text>Deutsch - English</Text></Item>
+            <Item on:SMUI:action={() => goto('/list/de-pt')}><Text>Deutsch - Português</Text></Item>
+            <!-- <Item><a sveltekit:prefetch href="/list/de-pt"><Text>Deutsch - Português</Text></Item> -->
+            <Item on:SMUI:action={() => goto('/list/de-en')}><Text>Deutsch - English</Text></Item>
+            <!-- <Item><a sveltekit:prefetch href="/list/de-en"><Text>Deutsch - English</Text></Item> -->
           </List>
         </Menu>
       </div>
