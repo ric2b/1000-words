@@ -102,7 +102,7 @@
       <!-- https://github.com/hperrin/svelte-material-ui/issues/108#issuecomment-782583530 -->
       <Wrapper>
         <IconButton class="material-icons" ripple={false} disabled={translationRevealed} on:click={() => translationRevealed = true}>visibility</IconButton>
-        <Tooltip yPos="above">Reveal</Tooltip>
+        <!-- <Tooltip yPos="above">Reveal</Tooltip> -->
       </Wrapper>
       
       <Wrapper>
@@ -110,7 +110,7 @@
           <Icon class="material-icons">arrow_forward</Icon>
           <Icon class="material-icons" on>replay</Icon>
         </IconButton>
-        <Tooltip yPos="above">Get next word</Tooltip>
+        <!-- <Tooltip yPos="above">Get next word</Tooltip> -->
       </Wrapper>
     </ActionIcons>
   </Actions>
