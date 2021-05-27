@@ -26,7 +26,7 @@
   import Card, { Content, PrimaryAction, Actions, ActionButtons, ActionIcons, } from '@smui/card';
   import Button, { Label } from '@smui/button';
   import IconButton, { Icon } from '@smui/icon-button';
-  import Slider from '@smui/slider';
+  import LinearProgress from '@smui/linear-progress';
   import FormField from '@smui/form-field';
   import Tooltip, { Wrapper } from '@smui/tooltip';
   import Menu from '@smui/menu';
@@ -75,9 +75,7 @@
 </h1>
 
 <Card>
-  {#key phrases.length} <!-- Workaround for https://github.com/hperrin/svelte-material-ui/issues/247 -->
-    <Slider discrete tickMarks bind:value={currentWordIndex} max={phrases.length-1} />
-  {/key}
+  <LinearProgress progress={currentWordIndex / (phrases.length-1)} closed={false} />
 
   <Content>
     <h2>{currentPhrase}</h2>
@@ -117,9 +115,13 @@
 </Card>
 
 <style>
+  h1, h2, p {
+    font-family: "Roboto", sans-serif;
+    text-align:center;
+  }
+
   h1 {
     /*font-family: "Roboto", sans-serif;*/
-    text-align:center;
     color: #fff;
     text-shadow: 2px 2px 3px #444;
     /*flex-grow: 1;*/
@@ -131,7 +133,7 @@
     /*padding:70px 20px 20px 20px;*/
     /*width: calc(100% + 10px);*/
     max-width: 20em;
-  } 
+  }
 
   #translation {
     filter: blur(4px);
@@ -142,9 +144,6 @@
   }
 
   :global(body) {
-    font-family: "Roboto", sans-serif;
-    text-align: center;
-
     display: flex;
     /*width: 50%;*/
     /*flex-grow: 1;*/
