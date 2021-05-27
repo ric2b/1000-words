@@ -20,6 +20,10 @@ export class CardPicker {
         this.cardStates.fill(CardState.new);
     }
 
+    countKnown() {
+        return this.cardStates.filter(state => state === CardState.known).length;
+    }
+
     allKnown() {
         return this.cardStates.every(state => state === CardState.known);
     }
@@ -34,6 +38,10 @@ export class CardPicker {
     
     markKnown(cardIndex) {
         this.markIndex(cardIndex, CardState.known);
+    }
+
+    getStateOf(cardIndex) {
+        return this.cardStates[cardIndex];
     }
 
     // TODO: looks like there's a bug where the same card is shown twice
@@ -56,7 +64,7 @@ export class CardPicker {
     }
 }
 
-const CardState = {
+export const CardState = {
     new: 0,
     unknown: 1,
     known: 2,

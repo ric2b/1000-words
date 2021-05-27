@@ -38,7 +38,7 @@
   import 'material-icons/iconfont/material-icons.css';
 
   // import CardPicker from '$lib/card_picker.js';
-  import { CardPicker } from '$lib/card_picker.js';
+  import { CardPicker, CardState } from '$lib/card_picker.js';
 
   export let listMetadata;
   export let selectedList;
@@ -49,16 +49,24 @@
   $: currentListMeta = listMetadata.lists[selectedList];
   $: header = currentListMeta.header;
 
-  $: card_picker = browser ? CardPicker.fromStringified(localStorage.getItem(`list_${selectedList}_cardStates`)) || CardPicker.fromDeckSize(phrases.length) : CardPicker.fromDeckSize(phrases.length);
-
+  $: card_picker = loadCardStates(selectedList);
   $: currentWordIndex = browser ? Number(localStorage.getItem(`list_${selectedList}_currentWordIndex`) || '0') : 0;
   $: [currentPhrase, currentTranslation] = phrases[currentWordIndex];
+  $: difficult = card_picker.getStateOf(currentWordIndex) === CardState.unknown;
 
   $: translationRevealed = false && currentWordIndex; // triggered when current index changes
   $: if (browser) localStorage.setItem(`list_${selectedList}_currentWordIndex`, currentWordIndex);
   $: if (browser) localStorage.setItem(`list_${selectedList}_cardStates`, card_picker.stringify() || currentWordIndex);
 
-  $: finished = currentWordIndex + 1 >= phrases.length;
+  $: completion = card_picker.countKnown() / (phrases.length - 1);
+  $: finished = currentWordIndex + 1 >= phrases.length; // TODO: should take into account if the unknown stack is empty.
+
+  function loadCardStates(selectedList) {
+    const stringifiedCardStates = browser ? localStorage.getItem(`list_${selectedList}_cardStates`) : null;
+    const cardPicker = stringifiedCardStates ? CardPicker.fromStringified(stringifiedCardStates) : CardPicker.fromDeckSize(phrases.length);
+
+    return cardPicker;
+  }
 
   function markUnknown() {
     card_picker.markUnknown(currentWordIndex);
@@ -93,10 +101,10 @@
 </h1>
 
 <Card>
-  <LinearProgress progress={currentWordIndex / (phrases.length-1)} closed={false} />
+  <LinearProgress progress={completion} closed={false} />
 
   <Content>
-    <h2>{currentPhrase}</h2>
+    <h2 class:difficult>{currentPhrase}</h2>
     <p id="translation" class:translationRevealed>{currentTranslation}</p>
   </Content>
   
@@ -124,7 +132,8 @@
       {#if finished}
         <IconButton class="material-icons" ripple={false} on:click={resetList}>replay</IconButton>
       {:else}  
-        <IconButton class="material-icons" ripple={false} on:click={markKnown}>done</IconButton>
+        <!-- <IconButton class="material-icons" ripple={false} on:click={markKnown}>done</IconButton> -->
+        <IconButton class="material-icons" ripple={false} on:click={markKnown}>check_circle</IconButton>
         <!-- <IconButton class="material-icons" ripple={false} on:click={markKnown}>verified</IconButton> -->        
       {/if}
     </ActionIcons>
@@ -158,6 +167,10 @@
 
   #translation.translationRevealed {
     filter: none;
+  }
+
+  .difficult {
+    color: #f00;
   }
 
   :global(body) {
