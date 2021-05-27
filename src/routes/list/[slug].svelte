@@ -152,8 +152,11 @@
     color: #111827;
 
     /*background: #f97316;*/
-    background: #f97316;
-    background: linear-gradient(90deg, #fcd34d 0%, #f97316 100%);  
+    /*background: #f97316;*/
+    /*background: linear-gradient(90deg, #fcd34d 0%, #f97316 100%); */
+
+    background: #4ade80;
+    background: linear-gradient(90deg, #4ade80 0%, #06b6d4 100%);  
 
     /*https://cssgradient.io/*/
     /*https://headlessui.dev/vue/switch*/
@@ -167,15 +170,16 @@
     /*magenta2: #ec4899 to #f43f5e*/
   }
 
-  :global(div .mdc-slider .mdc-slider__thumb-knob) {
-    /*border: 7px solid;*/
+/*  :global(div .mdc-slider .mdc-slider__thumb-knob) {
+    border: 7px solid;
     border: none;
     height: 25%;
     width: 25%;
-  }
+  }*/
   
   :root {
-    --mdc-theme-primary: #ff3e00;
+    /*--mdc-theme-primary: #ff3e00;*/
+    --mdc-theme-primary: rgb(15, 118, 110);
     --mdc-theme-secondary: #676778;
     /*--mdc-theme-background: #fff;*/
     /*--mdc-theme-text-primary-on-background: rgba(0, 0, 0, 0.1);*/
