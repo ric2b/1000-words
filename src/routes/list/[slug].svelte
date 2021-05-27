@@ -37,6 +37,9 @@
   import "@fontsource/roboto-mono"
   import 'material-icons/iconfont/material-icons.css';
 
+  // import CardPicker from '$lib/card_picker.js';
+  import { CardPicker } from '$lib/card_picker.js';
+
   export let listMetadata;
   export let selectedList;
   export let phrases;
@@ -46,16 +49,31 @@
   $: currentListMeta = listMetadata.lists[selectedList];
   $: header = currentListMeta.header;
 
+  $: card_picker = browser ? CardPicker.fromStringified(localStorage.getItem(`list_${selectedList}_cardStates`)) || CardPicker.fromDeckSize(phrases.length) : CardPicker.fromDeckSize(phrases.length);
+
   $: currentWordIndex = browser ? Number(localStorage.getItem(`list_${selectedList}_currentWordIndex`) || '0') : 0;
   $: [currentPhrase, currentTranslation] = phrases[currentWordIndex];
 
-  $: {
-    currentWordIndex; // block is triggered when current index changes
-    translationRevealed = false;
-    if (browser) { localStorage.setItem(`list_${selectedList}_currentWordIndex`, currentWordIndex) }
-  }
+  $: translationRevealed = false && currentWordIndex; // triggered when current index changes
+  $: if (browser) localStorage.setItem(`list_${selectedList}_currentWordIndex`, currentWordIndex);
+  $: if (browser) localStorage.setItem(`list_${selectedList}_cardStates`, card_picker.stringify() || currentWordIndex);
 
   $: finished = currentWordIndex + 1 >= phrases.length;
+
+  function markUnknown() {
+    card_picker.markUnknown(currentWordIndex);
+    currentWordIndex = card_picker.getNextCardIndex(currentWordIndex);
+  }
+
+  function markKnown() {
+    card_picker.markKnown(currentWordIndex);
+    currentWordIndex = card_picker.getNextCardIndex(currentWordIndex);
+  }
+
+  function resetList() {
+    card_picker.reset();
+    currentWordIndex = 0;
+  }
 
   function open_list_menu() {
     listMenu.setOpen(true);
@@ -98,18 +116,17 @@
 
     <ActionIcons>
       <!-- https://github.com/hperrin/svelte-material-ui/issues/108#issuecomment-782583530 -->
-      <Wrapper>
-        <IconButton class="material-icons" ripple={false} disabled={translationRevealed} on:click={() => translationRevealed = true}>visibility</IconButton>
-        <!-- <Tooltip yPos="above">Reveal</Tooltip> -->
-      </Wrapper>
       
-      <Wrapper>
-        <IconButton on:click={() => finished ? currentWordIndex = 0 : currentWordIndex += 1} bind:pressed={finished}>
-          <Icon class="material-icons">arrow_forward</Icon>
-          <Icon class="material-icons" on>replay</Icon>
-        </IconButton>
-        <!-- <Tooltip yPos="above">Get next word</Tooltip> -->
-      </Wrapper>
+      <IconButton class="material-icons" ripple={false} disabled={translationRevealed} on:click={() => translationRevealed = true}>visibility</IconButton>
+      
+      <IconButton class="material-icons" ripple={false} disabled={finished} on:click={markUnknown}>watch_later</IconButton>
+
+      {#if finished}
+        <IconButton class="material-icons" ripple={false} on:click={resetList}>replay</IconButton>
+      {:else}  
+        <IconButton class="material-icons" ripple={false} on:click={markKnown}>done</IconButton>
+        <!-- <IconButton class="material-icons" ripple={false} on:click={markKnown}>verified</IconButton> -->        
+      {/if}
     </ActionIcons>
   </Actions>
 </Card>
