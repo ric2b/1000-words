@@ -52,7 +52,7 @@
   $: card_picker = loadCardStates(selectedList);
   $: currentWordIndex = browser ? Number(localStorage.getItem(`list_${selectedList}_currentWordIndex`) || '0') : 0;
   $: [currentPhrase, currentTranslation] = phrases[currentWordIndex];
-  $: difficult = card_picker.getStateOf(currentWordIndex) === CardState.unknown;
+  $: difficultWord = card_picker.getStateOf(currentWordIndex) === CardState.unknown;
 
   $: translationRevealed = false && currentWordIndex; // triggered when current index changes
   $: if (browser) localStorage.setItem(`list_${selectedList}_currentWordIndex`, currentWordIndex);
@@ -104,7 +104,15 @@
   <LinearProgress progress={completion} closed={false} />
 
   <Content>
-    <h2 class:difficult>{currentPhrase}</h2>
+    <div style="display: flex; align-items: center; justify-content: center">
+      <h2>{currentPhrase}</h2>
+      {#if difficultWord}        
+        <Wrapper>
+          <span class="material-icons" style="margin-left: 10px;  margin-top: 3px; opacity: 0.4">error</span>
+          <Tooltip yPos="above">Schwieriges Wort</Tooltip>
+        </Wrapper>
+      {/if}
+    </div>
     <p id="translation" class:translationRevealed>{currentTranslation}</p>
   </Content>
   
@@ -167,10 +175,6 @@
 
   #translation.translationRevealed {
     filter: none;
-  }
-
-  .difficult {
-    color: #f00;
   }
 
   :global(body) {
