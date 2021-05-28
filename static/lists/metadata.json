@@ -2,7 +2,7 @@
     "defaultList": "de-en",
     "lists": {
         "de-en": {
-            "name": "Deutsch - Englisch", 
+            "name": "Die 1000 häufigsten Wörter", 
             "header": "Die 1000 häufigsten deutschen Wörter", 
             "hoverHeader": "The 1000 most common german words"
         },
