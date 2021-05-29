@@ -44,22 +44,24 @@ export class CardPicker {
         return this.cardStates[cardIndex];
     }
 
-    // TODO: looks like there's a bug where the same card is shown twice
+    // TODO: clean this up
     getNextCardIndex(currentIndex) {
         const cardStateCounts = this.cardStates.reduce((counts, state) => { counts[state] = (counts[state] || 0) + 1; return counts }, {});
 
         const newCardCount = cardStateCounts[CardState.new] || 0;
         const unknownCardCount = cardStateCounts[CardState.unknown] || 0;
 
+        const firstUnknownCardIndex = this.cardStates.findIndex((cardState, index) => index >= 0 && cardState === CardState.unknown)
+
         if (newCardCount !== 0 && unknownCardCount !== 0) {
-            const targetCardState = Math.random() < 0.6 ? CardState.new : CardState.unknown;
+            const targetCardState = Math.random() < 0.7 || currentIndex === firstUnknownCardIndex ? CardState.new : CardState.unknown;
             const findAheadOfIndex = targetCardState === CardState.new ? currentIndex + 1 : 0;
 
             return this.cardStates.findIndex((cardState, index) => index >= findAheadOfIndex && cardState === targetCardState);
         } else if (newCardCount !== 0) {
             return this.cardStates.findIndex((cardState, index) => index >= currentIndex + 1 && cardState === CardState.new);
         } else {
-            return this.cardStates.findIndex((cardState, index) => index >= 0 && cardState === CardState.unknown);
+            return firstUnknownCardIndex;
         }
     }
 }

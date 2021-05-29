@@ -71,6 +71,10 @@
   function markUnknown() {
     card_picker.markUnknown(currentWordIndex);
     currentWordIndex = card_picker.getNextCardIndex(currentWordIndex);
+
+    // TODO: bad workaround for reactivity depending on changing index
+    // translationRevealed = false;
+    // difficultWord = card_picker.getStateOf(currentWordIndex) === CardState.unknown
   }
 
   function markKnown() {
