@@ -6,6 +6,11 @@
             "header": "Die 1000 häufigsten deutschen Wörter", 
             "hoverHeader": "The 1000 most common german words"
         },
+        "en-de": {
+            "name": "The 1000 most common words", 
+            "header": "The 1000 most common german words", 
+            "hoverHeader": "Die 1000 häufigsten deutschen Wörter"
+        },
         "verben-mit-praepositionen": {
             "name": "Verben mit Präpositionen",
             "header": "Verben mit Präpositionen", 
