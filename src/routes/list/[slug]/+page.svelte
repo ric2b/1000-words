@@ -116,15 +116,27 @@
     <ActionIcons>
       <!-- https://github.com/hperrin/svelte-material-ui/issues/108#issuecomment-782583530 -->
 
-      <IconButton class="material-icons" ripple={false} disabled={translationRevealed} on:click={() => translationRevealed = true}>visibility</IconButton>
+      <Wrapper>
+        <IconButton class="material-icons" ripple={false} disabled={translationRevealed} on:click={() => translationRevealed = true}>visibility</IconButton>
+        <Tooltip yPos="above">Antworten</Tooltip>
+      </Wrapper>
 
-      <IconButton class="material-icons" ripple={false} disabled={finished} on:click={markUnknown}>watch_later</IconButton>
+      <Wrapper>
+        <IconButton class="material-icons" ripple={false} disabled={finished} on:click={markUnknown}>watch_later</IconButton>
+        <Tooltip yPos="above">Später Wiederholen</Tooltip>
+      </Wrapper>
 
       {#if finished}
-        <IconButton class="material-icons" ripple={false} on:click={resetList}>replay</IconButton>
+        <Wrapper>
+          <IconButton class="material-icons" ripple={false} on:click={resetList}>replay</IconButton>
+          <Tooltip yPos="above">Neustart</Tooltip>
+        </Wrapper>
       {:else}
         <!-- <IconButton class="material-icons" ripple={false} on:click={markKnown}>done</IconButton> -->
-        <IconButton class="material-icons" ripple={false} on:click={markKnown}>check_circle</IconButton>
+        <Wrapper>
+          <IconButton class="material-icons" ripple={false} on:click={markKnown}>check_circle</IconButton>
+          <Tooltip yPos="above">Bekannt</Tooltip>
+        </Wrapper>
         <!-- <IconButton class="material-icons" ripple={false} on:click={markKnown}>verified</IconButton> -->
       {/if}
     </ActionIcons>
