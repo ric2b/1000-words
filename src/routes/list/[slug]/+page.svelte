@@ -1,49 +1,28 @@
-<script context="module">
-  import { base, assets } from '$app/paths';
-
-  export async function load({ page, fetch, session, context }) {
-    // https://1000mostcommonwords.com/1000-most-common-german-words/ + https://www.convertjson.com/html-table-to-json.htm
-    const selectedList = page.params.slug;
-    const url = `${assets}/lists/${selectedList}.csv`;
-    const response = await fetch(url);
-
-    if (response.ok) {
-      return { props: { 
-        listMetadata: await (await fetch(`${assets}/lists/metadata.json`)).json(),
-        selectedList: selectedList,
-        phrases: await response.text().then(text => text.split('\n').map(x => x.split(','))) 
-      } };
-    }
-
-    return { status: response.status, error: new Error(`Could not load ${url}`) };
-  }
-</script>
-
 <script>
-  import { goto, prefetch } from '$app/navigation';
-  import { browser } from '$app/env';
+  import { base, assets } from '$app/paths';
+  import { goto, preloadData } from '$app/navigation';
+  import { browser } from '$app/environment';
 
-  import Card, { Content, PrimaryAction, Actions, ActionButtons, ActionIcons, } from '@smui/card';
-  import Button, { Label } from '@smui/button';
-  import IconButton, { Icon } from '@smui/icon-button';
+  import Card, { Content, Actions, ActionButtons, ActionIcons, } from '@smui/card';
+  import Button from '@smui/button';
+  import IconButton from '@smui/icon-button';
   import LinearProgress from '@smui/linear-progress';
-  import FormField from '@smui/form-field';
   import Tooltip, { Wrapper } from '@smui/tooltip';
   import Menu from '@smui/menu';
-  import List, { Item, Separator, Text } from '@smui/list';
+  import List, { Item, Text } from '@smui/list';
 
   import "@fontsource/roboto/400.css"
   import "@fontsource/roboto/700.css"
   import "@fontsource/roboto-mono"
   import 'material-icons/iconfont/material-icons.css';
 
-  // import CardPicker from '$lib/card_picker.js';
   import { CardPicker, CardState } from '$lib/card_picker.js';
 
-  export let listMetadata;
-  export let selectedList;
-  export let phrases;
+  export let data;
+  let listMetadata, selectedList, phrases
+  $: ({ listMetadata, selectedList, phrases } = data)
 
+  let currentPhrase, currentTranslation
   let translationRevealed, listMenu, menuAnchor;
 
   $: currentListMeta = listMetadata.lists[selectedList];
@@ -90,7 +69,7 @@
   function open_list_menu() {
     listMenu.setOpen(true);
     for (const listId in listMetadata.lists) {
-      prefetch(`${assets}/list/${listId}`);  
+      preloadData(`${assets}/list/${listId}`);
     }
   }
 </script>
@@ -110,7 +89,7 @@
   <Content>
     <div style="display: flex; align-items: center; justify-content: center">
       <h2>{currentPhrase}</h2>
-      {#if difficultWord}        
+      {#if difficultWord}
         <Wrapper>
           <span class="material-icons" style="margin-left: 10px;  margin-top: 3px; opacity: 0.4">error</span>
           <Tooltip yPos="above">Schwieriges Wort</Tooltip>
@@ -119,7 +98,7 @@
     </div>
     <p id="translation" class:translationRevealed>{currentTranslation}</p>
   </Content>
-  
+
   <Actions>
     <ActionButtons>
       <div bind:this={menuAnchor}>
@@ -136,17 +115,17 @@
 
     <ActionIcons>
       <!-- https://github.com/hperrin/svelte-material-ui/issues/108#issuecomment-782583530 -->
-      
+
       <IconButton class="material-icons" ripple={false} disabled={translationRevealed} on:click={() => translationRevealed = true}>visibility</IconButton>
-      
+
       <IconButton class="material-icons" ripple={false} disabled={finished} on:click={markUnknown}>watch_later</IconButton>
 
       {#if finished}
         <IconButton class="material-icons" ripple={false} on:click={resetList}>replay</IconButton>
-      {:else}  
+      {:else}
         <!-- <IconButton class="material-icons" ripple={false} on:click={markKnown}>done</IconButton> -->
         <IconButton class="material-icons" ripple={false} on:click={markKnown}>check_circle</IconButton>
-        <!-- <IconButton class="material-icons" ripple={false} on:click={markKnown}>verified</IconButton> -->        
+        <!-- <IconButton class="material-icons" ripple={false} on:click={markKnown}>verified</IconButton> -->
       {/if}
     </ActionIcons>
   </Actions>
@@ -194,7 +173,7 @@
     /*background: linear-gradient(90deg, #fcd34d 0%, #f97316 100%); */
 
     background: #4ade80;
-    background: linear-gradient(90deg, #4ade80 0%, #06b6d4 100%);  
+    background: linear-gradient(90deg, #4ade80 0%, #06b6d4 100%);
 
     /*https://cssgradient.io/*/
     /*https://headlessui.dev/vue/switch*/
@@ -214,7 +193,7 @@
     height: 25%;
     width: 25%;
   }*/
-  
+
   :root {
     /*--mdc-theme-primary: #ff3e00;*/
     --mdc-theme-primary: rgb(15, 118, 110);
@@ -222,6 +201,6 @@
     /*--mdc-theme-background: #fff;*/
     /*--mdc-theme-text-primary-on-background: rgba(0, 0, 0, 0.1);*/
     /*--mdc-theme-text-primary-on-light: rgba(0, 0, 0, 0.1);*/
-    /*--mdc-theme-text-primary-on-background: rgba(0, 0, 0, 0.1);*/ 
+    /*--mdc-theme-text-primary-on-background: rgba(0, 0, 0, 0.1);*/
   }
 </style>

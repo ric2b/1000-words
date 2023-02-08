@@ -21,7 +21,6 @@ To add a new list of cards:
 To build the static files run:
 
 ```bash
-  npm run build
+  yarn run build
 ```
 The files will end up in the `build` directory.
-  
