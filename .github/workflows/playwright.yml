@@ -1,4 +1,4 @@
-# From: https://github.com/jycouet/svienna_22_10/blob/master/playwright.config.ts
+# From: https://playwright.dev/docs/ci-intro
 name: Playwright Tests
 on:
   push:
@@ -9,24 +9,19 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-
-      ## Special action doing all the setup, thx The Guild!
-      - uses: the-guild-org/shared-config/setup@main
-        name: setup env
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          nodeVersion: 16
-          packageManager: pnpm
-
-      ## Playwright
+          node-version: 16
+      - name: Install dependencies
+        run: npm ci
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: Run Playwright tests
         run: npx playwright test
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: playwright-report
           path: playwright-report/
-          retention-days: 29
+          retention-days: 30
