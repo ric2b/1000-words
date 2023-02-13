@@ -10,7 +10,7 @@ export async function load({ params, fetch }) {
         return {
                 listMetadata: await (await fetch(`${assets}/lists/metadata.json`)).json(),
                 selectedList: selectedList,
-                phrases: await response.text().then(text => text.split('\n').map(x => x.split(',')))
+                phrases: await response.text().then(text => text.split('\n').map(x => x.split('\t')))
         };
     }
 

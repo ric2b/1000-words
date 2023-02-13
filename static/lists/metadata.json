@@ -15,6 +15,21 @@
             "name": "Verben mit Präpositionen",
             "header": "Verben mit Präpositionen", 
             "hoverHeader": "Verbs with prepositions"
+        },
+        "de-adjektive": {
+            "name": "Deutsch Adjektive",
+            "header": "Deutsch Adjektive",
+            "hoverHeader": "German Adjectives"
+        },
+        "de-substantive": {
+            "name": "Deutsch Substantive",
+            "header": "Deutsch Substantive",
+            "hoverHeader": "Gerban Substantives"
+        },
+        "de-verben": {
+            "name": "Deutsch Verben",
+            "header": "Deutsch Verben",
+            "hoverHeader": "German Verbs"
         }
     }
 }
