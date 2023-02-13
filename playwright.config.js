@@ -4,7 +4,7 @@ const config = {
 		command: 'npm run build && npm run preview',
 		port: 4173
 	},
-	reporter: [['list'], ['html']],
+	reporter: [[process.env.CI ? 'github' : 'list'], ['html']],
 	use: { trace: 'retain-on-failure' },
     // testMatch: '**/*e2e.js',
 	testDir: 'tests',
