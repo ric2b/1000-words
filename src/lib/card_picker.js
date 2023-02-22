@@ -30,6 +30,10 @@ export class CardPicker {
         return JSON.stringify(this.cards.map((card) => [card.face, card.rating]));
     }
 
+    stringifySeen() {
+        return JSON.stringify(Array.from(this.seen_cards));
+    }
+
     loadStringifiedScores(stringifiedScores) {
         const scores = new Map(JSON.parse(stringifiedScores));
 
@@ -38,6 +42,10 @@ export class CardPicker {
                 card.rating = scores.get(card.face)
             }
         }
+    }
+
+    loadSeen(stringifiedSeen) {
+        this.seen_cards = new Set(JSON.parse(stringifiedSeen));
     }
 
     progress() {

@@ -37,17 +37,18 @@
   $: card_picker = loadCardPicker(selectedList, phrases);
   $: current_card = card_picker.selectNextCard();
 
-  $: console.log([card_picker.newCard(current_card.face), current_card.rating, user_rating]); 
-  $: console.log(!card_picker.newCard(current_card.face) && current_card.rating > user_rating)
-  $: difficultWord = !card_picker.newCard(current_card.face) && current_card.rating > user_rating; 
-  // TODO: store seen state
+  // $: console.log([card_picker.newCard(current_card.face), current_card.rating, user_rating]); 
+  // $: console.log(!card_picker.newCard(current_card.face) && current_card.rating > user_rating)
+  $: difficultWord = !card_picker.newCard(current_card.face) && current_card.rating > user_rating;
 
   function loadCardPicker(selectedList, phrases) {
     const cardPicker = new CardPicker(phrases);
+    const stringifiedCardsSeen = browser ? localStorage.getItem(`list_${selectedList}_cards_seen`) : '[]';
     const stringifiedCardScores = browser ? localStorage.getItem(`list_${selectedList}_cardScores`) : '[]';
-    
-    // cardPicker.loadStringifiedState(stringifiedCardScores);
+
+    cardPicker.loadSeen(stringifiedCardsSeen);
     cardPicker.loadStringifiedScores(stringifiedCardScores);
+    completion = cardPicker.progress();
 
     return cardPicker;
   }
@@ -71,7 +72,7 @@
     completion = card_picker.progress();
 
     saveState();
-  }  
+  }
 
   function open_list_menu() {
     listMenu.setOpen(true);
@@ -80,8 +81,8 @@
   function saveState() {
     if (!browser) { return }
 
+    localStorage.setItem(`list_${selectedList}_cards_seen`, card_picker.stringifySeen());
     localStorage.setItem(`list_${selectedList}_cardScores`, card_picker.stringifyScores());
-
   }
 </script>
 
@@ -97,18 +98,21 @@
 <Card>
   <LinearProgress progress={completion} closed={false} />
 
-  <Content>
-    <div style="display: flex; align-items: center; justify-content: center">
-      <h2>{current_card.face}</h2>
+  <Content style="min-height: 120px">
+    <div style="display: flex; align-items: center; justify-content: center;">
+      {#if browser}
+        <h2>{current_card.face}</h2>
+      {/if}
       {#if difficultWord}
         <Wrapper>
           <span class="material-icons" style="margin-left: 10px;  margin-top: 3px; opacity: 0.4">error</span>
           <Tooltip yPos="above">Schwieriges Wort</Tooltip>
-          <!-- TODO: only if the word has been seen before and has higher rating than user -->
         </Wrapper>
       {/if}
     </div>
-    <p id="translation" class:translationRevealed>{current_card.answer}</p>
+    {#if browser}
+      <p id="translation" class:translationRevealed>{current_card.answer}</p>
+    {/if}
   </Content>
 
   <Actions>
@@ -170,7 +174,7 @@
   }
 
   #translation {
-    filter: blur(4px);
+    filter: blur(6px);
   }
 
   #translation.translationRevealed {
