@@ -16,61 +16,72 @@
   import "@fontsource/roboto-mono"
   import 'material-icons/iconfont/material-icons.css';
 
-  import { CardPicker, CardState } from '$lib/card_picker.js';
+  import { CardPicker } from '$lib/card_picker.js';
+  import { calculateEloRating } from '$lib/elo_rating.js';
 
   export let data;
-  let listMetadata, selectedList, phrases
   $: ({ listMetadata, selectedList, phrases } = data)
 
-  let currentPhrase, currentTranslation
-  let translationRevealed, listMenu, menuAnchor;
+  let completion = 0
+  let user_rating = (browser ? parseInt(localStorage.getItem(`user_rating`)) : null) || 1200;
+
+  $: if(browser) { localStorage.setItem(`user_rating`, user_rating) };
+  // $: if(browser) { localStorage.setItem(`list_${selectedList}_cardPickerState`, cardPicker.stringifyState) };
+
+  let translationRevealed = false
+  let listMenu, menuAnchor;
 
   $: currentListMeta = listMetadata.lists[selectedList];
   $: header = currentListMeta.header;
 
-  $: card_picker = loadCardStates(selectedList);
-  $: currentWordIndex = browser ? Number(localStorage.getItem(`list_${selectedList}_currentWordIndex`) || '0') : 0;
-  $: [currentPhrase, currentTranslation] = phrases[currentWordIndex];
-  $: difficultWord = card_picker.getStateOf(currentWordIndex) === CardState.unknown;
+  $: card_picker = loadCardPicker(selectedList, phrases);
+  $: current_card = card_picker.selectNextCard();
 
-  $: translationRevealed = false && currentWordIndex; // triggered when current index changes
-  $: if (browser) localStorage.setItem(`list_${selectedList}_currentWordIndex`, currentWordIndex);
-  $: if (browser) localStorage.setItem(`list_${selectedList}_cardStates`, card_picker.stringify() || currentWordIndex);
+  $: console.log([card_picker.newCard(current_card.face), current_card.rating, user_rating]); 
+  $: console.log(!card_picker.newCard(current_card.face) && current_card.rating > user_rating)
+  $: difficultWord = !card_picker.newCard(current_card.face) && current_card.rating > user_rating; 
+  // TODO: store seen state
 
-  $: completion = card_picker.countKnown() / (phrases.length - 1);
-  $: finished = currentWordIndex + 1 >= phrases.length; // TODO: should take into account if the unknown stack is empty.
-
-  function loadCardStates(selectedList) {
-    const stringifiedCardStates = browser ? localStorage.getItem(`list_${selectedList}_cardStates`) : null;
-    const cardPicker = stringifiedCardStates ? CardPicker.fromStringified(stringifiedCardStates) : CardPicker.fromDeckSize(phrases.length);
+  function loadCardPicker(selectedList, phrases) {
+    const cardPicker = new CardPicker(phrases);
+    const stringifiedCardScores = browser ? localStorage.getItem(`list_${selectedList}_cardScores`) : '[]';
+    
+    // cardPicker.loadStringifiedState(stringifiedCardScores);
+    cardPicker.loadStringifiedScores(stringifiedCardScores);
 
     return cardPicker;
   }
 
-  function markUnknown() {
-    card_picker.markUnknown(currentWordIndex);
-    currentWordIndex = card_picker.getNextCardIndex(currentWordIndex);
+  const markKnown = () => nextCard({ card_was_known: true });
+  const markUnknown = () => nextCard({ card_was_known: false });
+  
+  function nextCard({ card_was_known }) {
+    const { newUserEloRating, newCardEloRating } = calculateEloRating({
+      userEloRating: user_rating,
+      cardEloRating: current_card.rating,
+      actualOutcome: card_was_known ? 1 : 0,
+    });
+    
+    user_rating = newUserEloRating;
+    current_card.rating = newCardEloRating;
 
-    // TODO: bad workaround for reactivity depending on changing index
-    // translationRevealed = false;
-    // difficultWord = card_picker.getStateOf(currentWordIndex) === CardState.unknown
-  }
+    translationRevealed = false;
+    card_picker.markSeen(current_card.face);
+    current_card = card_picker.selectNextCard();
+    completion = card_picker.progress();
 
-  function markKnown() {
-    card_picker.markKnown(currentWordIndex);
-    currentWordIndex = card_picker.getNextCardIndex(currentWordIndex);
-  }
-
-  function resetList() {
-    card_picker.reset();
-    currentWordIndex = 0;
-  }
+    saveState();
+  }  
 
   function open_list_menu() {
     listMenu.setOpen(true);
-    for (const listId in listMetadata.lists) {
-      preloadData(`${assets}/list/${listId}`);
-    }
+  }
+
+  function saveState() {
+    if (!browser) { return }
+
+    localStorage.setItem(`list_${selectedList}_cardScores`, card_picker.stringifyScores());
+
   }
 </script>
 
@@ -88,15 +99,16 @@
 
   <Content>
     <div style="display: flex; align-items: center; justify-content: center">
-      <h2>{currentPhrase}</h2>
+      <h2>{current_card.face}</h2>
       {#if difficultWord}
         <Wrapper>
           <span class="material-icons" style="margin-left: 10px;  margin-top: 3px; opacity: 0.4">error</span>
           <Tooltip yPos="above">Schwieriges Wort</Tooltip>
+          <!-- TODO: only if the word has been seen before and has higher rating than user -->
         </Wrapper>
       {/if}
     </div>
-    <p id="translation" class:translationRevealed>{currentTranslation}</p>
+    <p id="translation" class:translationRevealed>{current_card.answer}</p>
   </Content>
 
   <Actions>
@@ -122,23 +134,16 @@
       </Wrapper>
 
       <Wrapper>
-        <IconButton class="material-icons" ripple={false} disabled={finished} on:click={markUnknown}>watch_later</IconButton>
+        <IconButton class="material-icons" ripple={false} on:click={markUnknown}>watch_later</IconButton>
         <Tooltip yPos="above">Später Wiederholen</Tooltip>
       </Wrapper>
 
-      {#if finished}
-        <Wrapper>
-          <IconButton class="material-icons" ripple={false} on:click={resetList}>replay</IconButton>
-          <Tooltip yPos="above">Neustart</Tooltip>
-        </Wrapper>
-      {:else}
-        <!-- <IconButton class="material-icons" ripple={false} on:click={markKnown}>done</IconButton> -->
-        <Wrapper>
-          <IconButton class="material-icons" ripple={false} on:click={markKnown}>check_circle</IconButton>
-          <Tooltip yPos="above">Bekannt</Tooltip>
-        </Wrapper>
-        <!-- <IconButton class="material-icons" ripple={false} on:click={markKnown}>verified</IconButton> -->
-      {/if}
+      <!-- <IconButton class="material-icons" ripple={false} on:click={markKnown}>done</IconButton> -->
+      <Wrapper>
+        <IconButton class="material-icons" ripple={false} on:click={markKnown}>check_circle</IconButton>
+        <Tooltip yPos="above">Bekannt</Tooltip>
+      </Wrapper>
+      <!-- <IconButton class="material-icons" ripple={false} on:click={markKnown}>verified</IconButton> -->
     </ActionIcons>
   </Actions>
 </Card>

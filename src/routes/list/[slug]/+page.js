@@ -6,13 +6,17 @@ export async function load({ params, fetch }) {
     const list_url = `${assets}/lists/${selectedList}.csv`;
     const response = await fetch(list_url);
 
-    if (response.ok) {
-        return {
-                listMetadata: await (await fetch(`${assets}/lists/metadata.json`)).json(),
-                selectedList: selectedList,
-                phrases: await response.text().then(text => text.split('\n').map(x => x.split('\t')))
-        };
+    if (!response.ok) {
+        return { status: response.status, error: new Error(`Could not load ${list_url}`) };
     }
-
-    return { status: response.status, error: new Error(`Could not load ${list_url}`) };
+    
+    return {
+        selectedList: selectedList,
+        phrases: await response.text().then(text => {
+            return text.split('\n').map(line => {
+                const [face, answer] = line.split('\t');
+                return { face, answer };
+            })
+        })                    
+    }    
 }

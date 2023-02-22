@@ -9,7 +9,6 @@
     "test:unit": "vitest",
     "lint": "prettier --plugin-search-dir . --check . && eslint .",
     "format": "prettier --plugin-search-dir . --write .",
-
     "prepare": "npm run vite-workaround",
     "vite-workaround": "find node_modules/@material/ -name \"*.js.map\" -type f -delete",
     "smui-theme-light": "smui-theme compile static/smui.css -i src/theme"
@@ -31,18 +30,20 @@
     "svelte-material-ui": "^6.2.0"
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
     "@playwright/test": "^1.30.0",
     "@sveltejs/adapter-auto": "^2.0.0",
     "@sveltejs/kit": "^1.5.0",
+    "@vitest/ui": "^0.28.5",
     "eslint": "^8.33.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-svelte3": "^4.0.0",
     "prettier": "^2.8.3",
     "prettier-plugin-svelte": "^2.9.0",
+    "smui-theme": "^6.2.0",
     "svelte": "^3.55.1",
     "vite": "^4.1.1",
-    "vitest": "^0.28.4",
-    "smui-theme": "^6.2.0"
+    "vitest": "^0.28.4"
   },
   "type": "module"
 }

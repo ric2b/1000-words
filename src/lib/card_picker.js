@@ -1,73 +1,54 @@
 // export default class CardPicker {
 export class CardPicker {
-    constructor(cardStates) {
-        this.cardStates = cardStates;
-    }
-
-    static fromDeckSize(numberOfCards) {
-        return new CardPicker(Array(numberOfCards).fill(CardState.new));
-    }
-
-    static fromStringified(serializedCardStates) {
-        return new CardPicker(JSON.parse(serializedCardStates));
-    }
-
-    stringify() {
-        return JSON.stringify(this.cardStates);
-    }
-
-    reset() {
-        this.cardStates.fill(CardState.new);
-    }
-
-    countKnown() {
-        return this.cardStates.filter(state => state === CardState.known).length;
-    }
-
-    allKnown() {
-        return this.cardStates.every(state => state === CardState.known);
-    }
-
-    markIndex(cardIndex, cardState) {
-        this.cardStates[cardIndex] = cardState;
-    }
-
-    markUnknown(cardIndex) {
-        this.markIndex(cardIndex, CardState.unknown);
-    }
+    #DEFAULT_RATING = 1200;
     
-    markKnown(cardIndex) {
-        this.markIndex(cardIndex, CardState.known);
+    constructor(cards) {
+        this.cards = cards;
+        this.seen_cards = new Set();
+        for (const card of this.cards) { card.rating ||= this.#DEFAULT_RATING }
     }
 
-    getStateOf(cardIndex) {
-        return this.cardStates[cardIndex];
+    selectNextCard() {
+        const totalWeight = this.cards.reduce((sum, card) => sum + card.rating, 0);
+        const randomNumber = Math.random() * totalWeight;
+        let runningTotal = 0;
+        
+        // Could be replaced by a binary search to improve performance
+        for (const card of this.cards) {
+          runningTotal += card.rating;
+          if (runningTotal >= randomNumber) {
+            return card;
+          }
+        }
+        
+        // Fallback in case of rounding errors
+        const fallback_card  = this.cards[this.cards.length - 1];
+        return fallback_card;
     }
 
-    // TODO: clean this up
-    getNextCardIndex(currentIndex) {
-        const cardStateCounts = this.cardStates.reduce((counts, state) => { counts[state] = (counts[state] || 0) + 1; return counts }, {});
+    stringifyScores() {
+        return JSON.stringify(this.cards.map((card) => [card.face, card.rating]));
+    }
 
-        const newCardCount = cardStateCounts[CardState.new] || 0;
-        const unknownCardCount = cardStateCounts[CardState.unknown] || 0;
+    loadStringifiedScores(stringifiedScores) {
+        const scores = new Map(JSON.parse(stringifiedScores));
 
-        const firstUnknownCardIndex = this.cardStates.findIndex((cardState, index) => index >= 0 && cardState === CardState.unknown)
-
-        if (newCardCount !== 0 && unknownCardCount !== 0) {
-            const targetCardState = Math.random() < 0.7 || currentIndex === firstUnknownCardIndex ? CardState.new : CardState.unknown;
-            const findAheadOfIndex = targetCardState === CardState.new ? currentIndex + 1 : 0;
-
-            return this.cardStates.findIndex((cardState, index) => index >= findAheadOfIndex && cardState === targetCardState);
-        } else if (newCardCount !== 0) {
-            return this.cardStates.findIndex((cardState, index) => index >= currentIndex + 1 && cardState === CardState.new);
-        } else {
-            return firstUnknownCardIndex;
+        for (const card of this.cards) {
+            if (scores.has(card.face)) {
+                card.rating = scores.get(card.face)
+            }
         }
     }
-}
 
-export const CardState = {
-    new: 0,
-    unknown: 1,
-    known: 2,
-};
+    progress() {
+        return this.seen_cards.size / this.cards.length;
+    }
+
+    markSeen(card_face) {
+        return this.seen_cards.add(card_face);
+    }
+
+    newCard(card_face) {
+        return this.seen_cards.has(card_face);
+    }
+}
