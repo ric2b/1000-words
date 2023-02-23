@@ -57,6 +57,6 @@ export class CardPicker {
     }
 
     newCard(card_face) {
-        return this.seen_cards.has(card_face);
+        return !this.seen_cards.has(card_face);
     }
 }
