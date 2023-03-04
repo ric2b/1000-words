@@ -138,8 +138,8 @@
       </Wrapper>
 
       <Wrapper>
-        <IconButton class="material-icons" ripple={false} on:click={markUnknown}>watch_later</IconButton>
-        <Tooltip yPos="above">Später Wiederholen</Tooltip>
+        <IconButton class="material-icons" ripple={false} on:click={markUnknown}>cancel</IconButton>
+        <Tooltip yPos="above">Nicht Bekannt</Tooltip>
       </Wrapper>
 
       <!-- <IconButton class="material-icons" ripple={false} on:click={markKnown}>done</IconButton> -->
