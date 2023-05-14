@@ -37,9 +37,9 @@
   $: card_picker = loadCardPicker(selectedList, phrases);
   $: current_card = card_picker.selectNextCard();
 
-  // $: console.log([card_picker.newCard(current_card.face), current_card.rating, user_rating]); 
+  // $: console.log([card_picker.newCard(current_card.face), current_card.rating, user_rating]);
   // $: console.log(!card_picker.newCard(current_card.face) && current_card.rating > user_rating)
-  $: difficultWord = !card_picker.newCard(current_card.face) && current_card.rating > user_rating;
+  $: difficultWord = !card_picker.newCard(current_card.face) && current_card.rating > user_rating + 400;
 
   function loadCardPicker(selectedList, phrases) {
     const cardPicker = new CardPicker(phrases);
@@ -55,14 +55,14 @@
 
   const markKnown = () => nextCard({ card_was_known: true });
   const markUnknown = () => nextCard({ card_was_known: false });
-  
+
   function nextCard({ card_was_known }) {
     const { newUserEloRating, newCardEloRating } = calculateEloRating({
       userEloRating: user_rating,
       cardEloRating: current_card.rating,
       actualOutcome: card_was_known ? 1 : 0,
     });
-    
+
     user_rating = newUserEloRating;
     current_card.rating = newCardEloRating;
 
